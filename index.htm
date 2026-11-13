@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Misi Reaktor: Tiket Keluar Termodinamika</title>
+<style>
+:root{--bg:#f4f7f5;--fg:#10242b;--card:#fff;--line:#cfdad6;--acc:#0f766e;--warm:#d97706;--ok:#15803d;--bad:#b91c1c;--mut:#4d6a70;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1a20;--fg:#e4efec;--card:#13262d;--line:#25414a;--acc:#2dd4bf;--warm:#fbbf24;--ok:#4ade80;--bad:#f87171;--mut:#9db6bb;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c1a20;--fg:#e4efec;--card:#13262d;--line:#25414a;--acc:#2dd4bf;--warm:#fbbf24;--ok:#4ade80;--bad:#f87171;--mut:#9db6bb;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 "Trebuchet MS",system-ui,sans-serif}
+#app{max-width:600px;margin:0 auto;padding:18px 16px 40px}
+h1{font-size:2.3rem;line-height:1.05;margin:8px 0 6px;letter-spacing:-.02em}h2{margin:.2em 0}
+.sub,.mut{color:var(--mut)}.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin:12px 0}
+label{display:block;font-weight:700;margin:6px 0}input{width:100%;padding:10px;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg);font:inherit;margin-top:4px}
+input.err{border-color:var(--bad)}
+.grid{display:grid;gap:10px}.mbtn,button{font:inherit;cursor:pointer;border-radius:10px;border:2px solid var(--acc);background:var(--card);color:var(--fg);padding:12px 14px;text-align:left}
+.mbtn{display:flex;flex-direction:column;gap:2px}.mbtn span{color:var(--mut)}.mbtn i{font-style:normal;color:var(--warm);font-weight:700}
+button:hover{background:var(--acc);color:var(--bg)}button:focus-visible,input:focus-visible{outline:3px solid var(--warm);outline-offset:2px}
+.ghost{border-color:var(--line);margin-top:12px}.pri{background:var(--acc);color:var(--bg);font-weight:700;text-align:center;width:100%;margin-top:12px}
+.hd{display:flex;justify-content:space-between;align-items:center;font-weight:700;gap:8px}
+.cells{display:flex;gap:4px;margin:8px 0}.cells b{flex:1;height:12px;border-radius:3px;background:var(--line)}.cells b.on{background:var(--warm)}
+.tb{height:8px;background:var(--line);border-radius:4px;overflow:hidden}.tb div{height:100%;background:var(--acc);width:100%}
+.q{font-size:1.15rem;font-weight:700;margin:16px 0 10px}.opt{display:block;width:100%;margin:8px 0}
+.opt.ok{background:var(--ok);border-color:var(--ok);color:#fff}.opt.bad{background:var(--bad);border-color:var(--bad);color:#fff}.opt:disabled{cursor:default;opacity:.95}
+.fb{margin-top:10px;padding:10px;border-left:4px solid var(--warm);background:var(--card)}
+.big{font-size:3rem;font-weight:800;color:var(--warm);line-height:1}.stars{font-size:2rem}
+table{border-collapse:collapse;width:100%;font-size:.9rem}th,td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}.wrap{overflow-x:auto}
+tr.me td{font-weight:700;color:var(--acc)}
+</style></head><body><div id="app"></div>
+<script>
+var Q={
+1:{t:"Empat proses",q:[
+{q:"Tabung baja tertutup rapat berisi gas dipanaskan. Prosesnya …",o:["Isokhorik","Isotermal","Isobarik","Adiabatik"],e:"Volume tetap, jadi W = 0 dan Q = ΔU."},
+{q:"Gas mengembang secara isotermal. Pernyataan yang benar …",o:["ΔU = 0 dan seluruh kalor yang diserap menjadi usaha","Q = 0 dan suhu turun","W = 0 dan Q = ΔU","Tekanan tetap dan volume bertambah"],e:"Suhu tetap berarti ΔU = 0, sehingga Q = W."},
+{q:"Tabung pompa ban hangat saat dipompa sangat cepat karena …",o:["pemampatan hampir adiabatik: usaha yang diterima menambah energi dalam","gas menyerap kalor dari udara luar","volume gas dijaga tetap","gas melakukan usaha pada lingkungan"],e:"Q ≈ 0 dan W < 0, maka ΔU = −W > 0: suhu naik."},
+{q:"Pada proses isobarik, volume gas menjadi 2 kali semula. Suhu mutlaknya menjadi …",o:["2 kali","½ kali","tetap","4 kali"],e:"V/T = tetap (Charles), jadi T ikut 2 kali: 300 K menjadi 600 K."},
+{q:"Gas keluar sangat cepat dari tabung sehingga tabung terasa dingin. Prosesnya …",o:["Adiabatik: gas melakukan usaha memakai energi dalamnya, suhu turun","Isokhorik karena volume tabung tetap","Isotermal karena suhu tetap","Isobarik karena tekanan naik"],e:"Q ≈ 0 dan W > 0, maka ΔU = −W < 0: suhu turun."}]},
+2:{t:"Diagram P-V dan Hukum I",q:[
+{q:"Gas mengembang isobarik pada 200 kPa dari 1 L menjadi 4 L. Usaha gas …",o:["600 J","200 J","400 J","800 J"],e:"W = PΔV = 200 kPa × 3 L = 600 J."},
+{q:"Siklus pada diagram P-V berlangsung searah jarum jam. Pernyataan yang benar …",o:["W netto positif: bekerja sebagai mesin","W netto negatif: bekerja sebagai pendingin","W netto nol karena kembali ke keadaan awal","ΔU netto positif"],e:"Luas yang dilingkupi positif; ΔU satu siklus tetap 0."},
+{q:"Gas menerima kalor 500 J dan melakukan usaha 200 J. ΔU = …",o:["300 J","700 J","−300 J","500 J"],e:"ΔU = Q − W = 500 − 200 = 300 J."},
+{q:"Gas dimampatkan adiabatik; lingkungan melakukan usaha 450 J pada gas. ΔU = …",o:["+450 J","−450 J","0 J","+900 J"],e:"Q = 0 dan W = −450 J, maka ΔU = +450 J: suhu naik."},
+{q:"Pada simulasi isobarik gas monoatomik, W = 4.988 J dan ΔU = 7.483 J. Kalor Q = …",o:["12.471 J","2.495 J","7.483 J","4.988 J"],e:"Q = ΔU + W = 7.483 + 4.988 = 12.471 J."}]},
+3:{t:"Siklus mesin dan iklim",q:[
+{q:"Siklus diesel, tahap pembakaran (2→3) isobarik. Pernyataan yang benar …",o:["Q > 0: sebagian kalor menjadi usaha, sisanya menambah energi dalam","Q = 0 karena adiabatik","W = 0 karena volume tetap","ΔU < 0 karena gas melepas kalor"],e:"Gas menerima kalor, lalu Q = ΔU + W."},
+{q:"Dalam satu siklus penuh, gas kembali ke keadaan awal. Hubungan yang benar …",o:["Q netto = W netto","Q netto = 0","W netto = 0","Q netto = ΔU netto ≠ 0"],e:"ΔU satu siklus = 0, maka Q netto = W netto."},
+{q:"Kulkas/AC: rasio tekanan naik dari 2,0 ke 5,0, COP turun dari ±4,6 ke ±1,7. Artinya …",o:["listrik untuk menyerap kalor yang sama bertambah","listrik yang dibutuhkan berkurang","kebutuhan listrik tidak berubah","kalor ruangan otomatis turun"],e:"COP = Q serap / W masuk. COP kecil berarti listrik lebih banyak, emisi lebih besar bila listrik dari fosil."},
+{q:"Mengapa efisiensi η mesin diesel kurang dari 100%?",o:["Sebagian kalor harus dibuang agar gas kembali ke keadaan awal","Hukum I melarang kalor menjadi usaha","Energi dalam bertambah tiap siklus","Tahap adiabatik menyerap kalor"],e:"Tahap 4→1 melepas kalor, jadi W netto = Q masuk − Q buang."},
+{q:"Dua AC memindahkan kalor yang sama, COP AC-A lebih tinggi. Bila listrik dari bahan bakar fosil, AC-A lebih ramah iklim karena …",o:["listrik yang dipakai lebih sedikit, emisi CO₂ pembangkit lebih kecil","AC-A menghilangkan kalor dari bumi","kalor yang dilepas ke luar bernilai nol","refrigeran pasti tidak bocor"],e:"AC memindahkan kalor, tidak menghilangkannya; COP tinggi berarti usaha listrik lebih kecil."}]}};
+
+var API="https://script.google.com/macros/s/AKfycbztmMzzUtiHfwX1ntBiz0V9BqLERzSsI-jOxpu1DtTM33MB8BGY8_JkJWcxgcT8JFbb1Q/exec";
+var S={m:0,i:0,sk:0,ok:0,st:0,left:20,ans:0,nama:"",kelas:"",absen:"",tm:null,opts:[],view:"muka",pend:null,rek:null};
+var $=function(i){return document.getElementById(i)},app=$("app");
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t}return a}
+
+function ready(){return API.indexOf("script.google.com")>-1}
+function simpanId(){try{localStorage.setItem("tk_id",JSON.stringify([S.nama,S.kelas,S.absen]))}catch(e){}}
+function muatId(){try{var a=JSON.parse(localStorage.getItem("tk_id")||"null");if(a){S.nama=a[0];S.kelas=a[1];S.absen=a[2]}}catch(e){}}
+function muka(){
+  S.view="muka";clearInterval(S.tm);
+  if(S.nama&&S.kelas&&S.absen)return menu();
+  app.innerHTML='<h1>Misi Reaktor</h1><p class="sub">Tiket keluar Fisika XI: Kalor dan Termodinamika. Isi identitasmu dulu agar nilaimu tercatat di rekap guru, lalu soal terbuka.</p>'+
+  '<div class="card"><label>Nama lengkap<input id="nm" maxlength="40" autocomplete="name"></label><label>Kelas<input id="kl" maxlength="12" placeholder="contoh: XI-2"></label><label>No. absen<input id="ab" maxlength="3" inputmode="numeric"></label></div>'+
+  '<button class="pri" id="masuk">Masuk</button><button class="ghost" id="gr" style="width:100%">Masuk sebagai guru</button>';
+}
+function menu(){
+  S.view="menu";clearInterval(S.tm);
+  app.innerHTML='<h1>Misi Reaktor</h1><p class="sub">Halo, <b>'+esc(S.nama)+'</b> ('+esc(S.kelas)+', absen '+esc(S.absen)+'). Pilih pertemuan hari ini.</p><div class="grid">'+
+  [1,2,3].map(function(m){return '<button class="mbtn" data-m="'+m+'"><b>Pertemuan '+m+'</b><span>'+Q[m].t+'</span></button>'}).join("")+'</div>'+
+  '<button class="ghost" id="gi">Ganti identitas</button><p class="mut" style="margin-top:14px">'+(ready()?"Skor terbaikmu terkirim otomatis ke rekap guru.":"Mode latihan: skor belum tersambung ke Google Sheet.")+'</p>';
+}
+function masuk(){
+  var f=[["nm","nama"],["kl","kelas"],["ab","absen"]],ok=true;
+  f.forEach(function(x){var v=$(x[0]).value.trim();$(x[0]).classList.toggle("err",!v);if(!v)ok=false;else S[x[1]]=v});
+  if(!ok)return;S.kelas=S.kelas.toUpperCase();simpanId();menu();
+}
+function play(m){S.m=m;S.i=0;S.sk=0;S.ok=0;S.st=0;ask()}
+function ask(){
+  S.view="play";var q=Q[S.m].q[S.i];S.opts=shuf(q.o);S.ans=0;S.left=20;
+  var cells="";for(var c=0;c<5;c++)cells+='<b'+(c<S.ok?' class="on"':'')+'></b>';
+  app.innerHTML='<div class="hd"><span>Soal '+(S.i+1)+' dari 5</span><span>Skor '+S.sk+(S.st>1?' · kombo ×'+S.st:'')+'</span></div><div class="cells" aria-label="Energi terkumpul">'+cells+'</div><div class="tb"><div id="tb"></div></div>'+
+  '<p class="q">'+esc(q.q)+'</p>'+S.opts.map(function(o,i){return '<button class="opt" data-k="'+i+'">'+esc(o)+'</button>'}).join("")+'<div id="fb"></div>';
+  clearInterval(S.tm);S.tm=setInterval(function(){S.left-=0.1;var b=$("tb");if(b)b.style.width=Math.max(0,S.left/20*100)+"%";if(S.left<=0)answer(-1)},100);
+}
+function answer(k){
+  if(S.ans)return;S.ans=1;clearInterval(S.tm);var q=Q[S.m].q[S.i],ok=k>=0&&S.opts[k]===q.o[0];
+  if(ok){S.ok++;S.sk+=100+Math.round(Math.max(0,S.left)*2)+10*S.st;S.st++}else S.st=0;
+  var bs=app.querySelectorAll(".opt");bs.forEach(function(b,i){b.disabled=true;if(S.opts[i]===q.o[0])b.classList.add("ok");else if(i===k)b.classList.add("bad")});
+  $("fb").innerHTML='<div class="fb"><b>'+(ok?"Benar! Energi bertambah.":(k<0?"Waktu habis.":"Belum tepat."))+'</b> '+esc(q.e)+'</div><button class="pri" id="nx">'+(S.i<4?"Soal berikutnya":"Lihat hasil")+'</button>';
+  $("nx").focus();
+}
+function next(){S.i++;S.i<5?ask():done()}
+
+function done(){
+  S.view="hasil";var st=S.ok>=5?3:S.ok>=3?2:S.ok>=1?1:0;
+  app.innerHTML='<h2>Misi selesai, '+esc(S.nama)+'</h2><div class="card"><div class="big">'+S.sk+'</div><div class="stars" aria-label="'+st+' bintang">'+"★".repeat(st)+"☆".repeat(3-st)+'</div><p>'+S.ok+' dari 5 soal benar. '+(S.ok===5?"Reaktor menyala penuh.":S.ok>=3?"Energi cukup, ulangi untuk skor lebih tinggi.":"Ulangi dan baca pembahasannya dengan teliti.")+'</p><p class="mut" id="sv"></p></div><button class="pri" id="again">Main lagi</button><button class="ghost" id="hm" style="width:100%">Kembali ke menu</button>';
+  S.pend={m:S.m,nama:S.nama,kelas:S.kelas,absen:S.absen,skor:S.sk,benar:S.ok};kirim();
+}
+async function post(o){var r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(o)});return r.json()}
+async function kirim(){
+  var sv=$("sv");if(!sv||!S.pend)return;
+  if(!ready()){sv.textContent="Mode latihan: skor tidak tersimpan.";return}
+  sv.textContent="Mengirim skor…";
+  try{var j=await post(S.pend);if(!j.ok)throw 0;S.pend=null;if($("sv"))$("sv").textContent="Skor terbaikmu sudah tersimpan di rekap guru."}
+  catch(e){if($("sv"))$("sv").innerHTML='Skor belum terkirim. Periksa internet, lalu <button id="rt" style="padding:4px 10px">kirim ulang</button>'}
+}
+function guru(){
+  S.view="guru";app.innerHTML='<h2>Masuk guru</h2><div class="card"><label>Kode guru<input id="kd" type="password" autocomplete="off"></label></div><button class="pri" id="lihat">Lihat rekap</button><p id="gs" class="mut"></p><button class="ghost" id="hm" style="width:100%">Kembali</button>';
+}
+async function lihat(){
+  var gs=$("gs"),kd=$("kd").value;if(!kd)return;
+  if(!ready()){gs.textContent="Tautan Apps Script belum dipasang di file ini.";return}
+  gs.textContent="Memuat rekap…";
+  try{var j=await post({aksi:"rekap",kode:kd});if(!j.ok){gs.textContent=j.err==="kode"?"Kode salah.":"Gagal memuat rekap.";return}S.rek=j.data;rekap()}
+  catch(e){gs.textContent="Tidak dapat terhubung ke server."}
+}
+function gabung(){
+  var mp={};[1,2,3].forEach(function(m){(S.rek["p"+m]||[]).forEach(function(r){var k=(r.nama+"|"+r.kelas+"|"+r.absen).toLowerCase();mp[k]=mp[k]||{nama:r.nama,kelas:r.kelas,absen:r.absen};mp[k]["p"+m]=r})});
+  return Object.keys(mp).map(function(k){var d=mp[k],ds=[1,2,3].filter(function(m){return d["p"+m]});d.avg=ds.length?Math.round(ds.reduce(function(s,m){return s+d["p"+m].benar*20},0)/ds.length):"";return d})
+   .sort(function(a,b){return String(a.kelas).localeCompare(String(b.kelas))||(+a.absen-+b.absen)});
+}
+function rekap(){
+  S.view="rekap";var rs=gabung(),c=function(p){return p?p.benar+"/5 · "+p.skor+" ("+p.coba+"×)":"-"};
+  app.innerHTML='<h2>Rekap tiket keluar</h2><p class="mut">'+rs.length+' murid tercatat. Sel berisi: benar · skor terbaik (jumlah percobaan). Nilai = rata-rata persen benar. Rincian per pertemuan ada di lembar P1, P2, P3 pada Google Sheet.</p><div class="wrap"><table><tr><th>Nama</th><th>Kelas</th><th>Abs</th><th>P1</th><th>P2</th><th>P3</th><th>Nilai</th></tr>'+
+  rs.map(function(d){return '<tr><td>'+esc(d.nama)+'</td><td>'+esc(d.kelas)+'</td><td>'+esc(d.absen)+'</td><td>'+c(d.p1)+'</td><td>'+c(d.p2)+'</td><td>'+c(d.p3)+'</td><td>'+d.avg+'</td></tr>'}).join("")+'</table></div><button class="pri" id="csvb">Unduh CSV</button><button class="ghost" id="hm" style="width:100%">Keluar</button>';
+}
+function csv(){
+  var q=function(s){return '"'+String(s).replace(/"/g,'""')+'"'},t='Nama,Kelas,Absen,P1 benar,P1 skor,P2 benar,P2 skor,P3 benar,P3 skor,Nilai\n'+
+  gabung().map(function(d){var f=function(m){var p=d["p"+m];return p?p.benar+","+p.skor:","};return [q(d.nama),q(d.kelas),q(d.absen),f(1),f(2),f(3),d.avg].join(",")}).join("\n");
+  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+t],{type:"text/csv"}));a.download="rekap-tiket-keluar.csv";a.click();
+}
+app.addEventListener("click",function(e){
+  var t=e.target.closest("button");if(!t)return;
+  if(t.dataset.m)play(+t.dataset.m);else if(t.dataset.k!==undefined)answer(+t.dataset.k);
+  else if(t.id==="nx")next();else if(t.id==="again")play(S.m);else if(t.id==="masuk")masuk();
+  else if(t.id==="hm"){S.rek=null;muka()}else if(t.id==="gr")guru();else if(t.id==="lihat")lihat();
+  else if(t.id==="csvb")csv();else if(t.id==="rt")kirim();
+  else if(t.id==="gi"){S.nama=S.kelas=S.absen="";try{localStorage.removeItem("tk_id")}catch(x){}muka()}
+});
+muatId();muka();
+</script></body></html>
